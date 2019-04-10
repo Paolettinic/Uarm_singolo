@@ -10,14 +10,17 @@ class Control(object):
         self._host = host
         self._port = port
         self._sleep_time = sleep_time
-        self._api = VRep.connect(self._host, self._port)
+        try:
+            self._api = VRep.connect(self._host, self._port)
+        except:
+            print('V-REP not responding')
+            exit(-1)
         self.robot = None
 
     def run(self):
             while True:
-                self.robot.process_commands(self.get_commands())
                 self.process_percepts(self.robot.get_percepts(),self.robot.isHolding())
-                time.sleep(self._sleep_time)
+                self.robot.process_commands(self.get_commands())
 
     def make_robot(self, api):
         return None
@@ -44,6 +47,7 @@ class MessageThread(threading.Thread):
     def run(self):
         while self.running:
             p2pmsg = self.client.get_term()[0]
+            print("-----------P2P MESSAGE_",p2pmsg)
             self.queue.put(p2pmsg)
 
     def stop(self):
@@ -93,8 +97,10 @@ class PedroControl(Control):
         cmds = []
         while not self.queue.empty():
             p2pmsg = self.queue.get()
+            print("P2PMSG=",p2pmsg)
             msg = p2pmsg.args[2]
-            actions = msg.args[0]
+            print("MESSAGE=", msg)
+            actions = msg
             for a in actions.toList():
                 cmds.append(self.action_to_command(a))
         return cmds
@@ -126,10 +132,14 @@ class PedroControl(Control):
         cmd_type = a.functor.val
         cmd = a.args[0]
         if cmd_type == 'start_':
-            print("START CMD:\t\t\t",cmd)
-            #return {'cmd': 'move_forward', 'args': [0.0]}
+            print("------------------------START CMD:\t\t\t",cmd.functor.val," | ",cmd.args[0])
+            if cmd.functor.val == "pickup":
+                return {'cmd': cmd.functor.val, 'args': [cmd.args[0].val]}
+            if cmd.functor.val == "put_on_table":
+                print("PUT ON TABLE")
+                return {'cmd': "put_on_table", 'args': []}
         else:
-            print("STOP CMD:\t\t\t", cmd)
+            print("--------------------------STOP CMD:\t\t\t", cmd)
 
         #else return {'cmd':'action', 'args':[]}
 
@@ -153,33 +163,3 @@ def pedro_control():
     # wait for and process initialize_ message
     vrep_pedro.process_initialize()
     vrep_pedro.run()
-
-
-class DemoControl(Control):
-
-    def __init__(self, host='127.0.0.1', port=19997, sleep_time=2):
-        super().__init__(host, port, sleep_time)
-        self.i = 0
-
-
-    def make_robot(self, api)-> Uarm:
-        return Uarm('uarmR',api)
-
-    def process_percepts(self, object_percepted,arm_status):
-        for i in range((object_percepted)):
-            print (i)
-
-    def get_commands(self):
-        return [{'cmd': 'placeEnd', 'args': [(-74,231,50)]}]
-
-    def process_initialize(self, initial_env,arm_status):
-         return [{'cmd': 'placeEnd', 'args': [(0, 100, 100)]}]
-
-
-
-
-def demo_control():
-    vrep_demo = DemoControl()
-    #vrep_demo.process_initialize()
-    #time.sleep(1)
-    vrep_demo.run()

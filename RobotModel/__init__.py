@@ -149,7 +149,8 @@ class Uarm(RobotModel):
 
     def process_commands(self, commands):
         for cmd in commands:
-            self.invoke(cmd['cmd'], cmd['args'])
+            if not cmd == None:
+                self.invoke(cmd['cmd'], cmd['args'])
 
     def invoke(self, cmd, args):
         print('invoke', cmd, args)
