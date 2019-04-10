@@ -1,0 +1,28 @@
+% pickup/putdown test program
+% In interpreter:
+% consult(pickput).
+% go().
+
+% In the simulation press the space bar and then drag blocks around - press
+% the space again to continue.
+
+
+def block ::= (1 .. 16)
+
+percept holding(block), on_table(block), on(block,block)
+def durative::= pickup(block) |  put_on_block(block) | put_on_table()
+
+rel clear(block)
+clear(B) <=
+    not on(_,B)
+
+tel pickOrput()
+pickOrput(){
+        on_table(B) & clear(B) ~> pickup(B)
+        holding(_) ~> put_on_table()
+        }
+
+act go()
+go() ~>
+    start_agent(robot_sim, all);
+    start_task(_, pickOrput())
