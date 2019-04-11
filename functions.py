@@ -1,7 +1,6 @@
 import numpy as np
 import math
 import RobotModel
-from RobotModel.cube import Cube
 #from collections import Counter
 
 def getMotorsTetha(r: RobotModel, x: float, y: float, z: float):
@@ -126,9 +125,6 @@ def readVisionData(imageTop, imageFront, rawTop, rawFront):
             for j in range(0,levels):
                 color = getColorName(*readImagesColor(rawFront, first_block_z-((height/levels)*j), posx))
                 object_list.update({color: (x, y, levels-j)})
-    objList_to_cubeArray(object_list)
-
-
     return object_list
 
 def getFreeSlots(object_list,slots):
@@ -190,14 +186,6 @@ def getMergedVision(listL:dict,listR:dict):
     return cubes
 
 
-def objList_to_cubeArray(object_list):
-    cubes= []
-    for obj in dict(object_list):
-        c = Cube()
-        c.setPosition(*object_list[obj])
-        c.set_index_color(obj)
-        print("COL: ",obj," POS: ",c.get_x()," | ", c.get_y() ," | ", c.get_z())
-        cubes.append(c)
 
 
 def assignCoordinateToColor(rawImage,x,y):

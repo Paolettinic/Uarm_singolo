@@ -77,25 +77,29 @@ class Uarm(RobotModel):
     def pickup(self,block):
         bColor = functions.index_to_color(block)
         x,y,z = self._state.block_env[bColor]
-        scheme = [0,0,60,120]
+        scheme = [0,0,61,130]
+        self.placeEnd((int(x),int(y),130))
         self.placeEnd((int(x),int(y),scheme[z]))
         self.enableSuction()
+        self.placeEnd((int(x), int(y), 130))
         self.goHome()
         self.setHolding(block)
 
     def put_on_table(self):
-        position = (0,225,0)
-        self.placeEnd(position)
+        x,y = self._state.slot_env[0] #Use the first free slot
+        self.placeEnd((x, y, 130))
+        self.placeEnd((x,y,0))
         self.disableSuction()
+        self.placeEnd((x, y, 130))
         self.goHome()
         self.setHolding(0)
+        self._state.slot_env.remove((x,y)) # the slot has just been used so it's no longer free
 
     def placeEnd(self, coordinates: tuple):
         x, y, z = coordinates
         theta = functions.getMotorsTetha(self, x, y, z)
         self._state.Moving = True
         self.rotateMotors(*theta)
-        #self.signal.set()
 
     def rotateMotors(self, theta1, theta2, theta3 ):
         self._state.Moving = True
@@ -155,6 +159,7 @@ class Uarm(RobotModel):
         object_list = functions.readVisionData(imageTop, imageFront,rawTop ,rawFront)
         self._state.block_env = object_list
         self._state.slot_env = functions.getFreeSlots(object_list,self._env_slots)
+        print(object_list)
         return object_list
 
 

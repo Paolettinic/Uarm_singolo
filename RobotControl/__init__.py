@@ -54,7 +54,7 @@ class MessageThread(threading.Thread):
         self.running = False
 
 class PedroControl(Control):
-    def __init__(self, host='127.0.0.1', port=19997, sleep_time=1.0):
+    def __init__(self, host='127.0.0.1', port=19997, sleep_time=1):
         super().__init__(host, port, sleep_time)
         self.client = pedroclient.PedroClient()
         self.client.register("robot_sim")
@@ -68,8 +68,8 @@ class PedroControl(Control):
         msg = []
 
         for color,(x,y,z) in block_percepts.items():
-            print("color: {0}".format(color))
-            print("X: {0} | Y: {1} | Z: {2}".format(x,y,z))
+            #print("color: {0}".format(color))
+            #print("X: {0} | Y: {1} | Z: {2}".format(x,y,z))
             index_color_on = f.color_to_index(color)
             if z == 1:
                 msg.append('on_table({0})'.format(index_color_on))
