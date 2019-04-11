@@ -131,6 +131,20 @@ def readVisionData(imageTop, imageFront, rawTop, rawFront):
 
     return object_list
 
+def getFreeSlots(object_list,slots):
+    freeslots = []
+    for x,y in slots:
+        found = False
+        for color,(px,py,pz) in object_list.items():
+            if found:
+                break
+            if px <= x+5 and px >= x-5 and py <= y+5 and py >= y-5:
+                found = True
+        if not found:
+            freeslots.append((x,y))
+    return freeslots
+
+
 def index_to_color(index):
     scheme = [0,"purple","cyan","red","green","blue","yellow"]
     return scheme[index]

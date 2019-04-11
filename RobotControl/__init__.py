@@ -70,14 +70,14 @@ class PedroControl(Control):
         for color,(x,y,z) in block_percepts.items():
             print("color: {0}".format(color))
             print("X: {0} | Y: {1} | Z: {2}".format(x,y,z))
-            index_color = f.color_to_index(color)
+            index_color_on = f.color_to_index(color)
             if z == 1:
-                msg.append('on_table({0})'.format(index_color))
+                msg.append('on_table({0})'.format(index_color_on))
             else:
                 for c,(px,py,pz) in block_percepts.items():
                     if px == x and py == y and pz == z - 1:
-                        index_color = f.color_to_index(c)
-                        msg.append('on_table({0})'.format(index_color))
+                        index_color_under = f.color_to_index(c)
+                        msg.append('on({0},{1})'.format(index_color_on,index_color_under))
 
         if not arm_holding == 0:
             msg.append('holding({0})'.format(arm_holding))
@@ -163,3 +163,33 @@ def pedro_control():
     # wait for and process initialize_ message
     vrep_pedro.process_initialize()
     vrep_pedro.run()
+
+
+class DemoControl(Control):
+
+    def __init__(self, host='127.0.0.1', port=19997, sleep_time=2):
+        super().__init__(host, port, sleep_time)
+        self.i = 0
+
+
+    def make_robot(self, api)-> Uarm:
+        return Uarm('uarmR', api)
+
+    def process_percepts(self, object_percepted,arm_status):
+        for i in range((object_percepted)):
+            print (i)
+
+    def get_commands(self):
+        return [{'cmd': 'placeEnd', 'args': [(-74,231,50)]}]
+
+    def process_initialize(self):
+         return [{'cmd': 'placeEnd', 'args': [(0, 100, 100)]}]
+
+
+
+
+def demo_control():
+    vrep_demo = DemoControl()
+    #vrep_demo.process_initialize()
+    #time.sleep(1)
+    vrep_demo.run()

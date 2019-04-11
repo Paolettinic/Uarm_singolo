@@ -6,12 +6,12 @@ import threading
 
 class RobotState():
     def __init__(self):
-        self.env = []
+        self.block_env = []
         self.Moving = False
         self.isHolding = False
         self.nextEFPosition = (0,0,0)
         self.goingToSharedSpace = False
-
+        self.slot_env = [] # Only contains free slots
 
 class RobotModel ():
     def __init__(self, name: str, api: VRep):
@@ -46,9 +46,20 @@ class Uarm(RobotModel):
         self._cameraResX = 128
         self._cameraResY = 128
 
+        # perm S7 (1653)(24)
+        self._env_slots = [
+            (74,225),
+            (0,225),
+            (-74,225),
+            (149,225),
+            (-153,225),
+            (223,225),
+            (-223,225)
+        ]
+
 
     def setStateEnv(self,object_list):
-        self._state.env = object_list
+        self._state.block_env = object_list
 
     def setHolding(self,isHolding):
         self._state.isHolding = isHolding
@@ -65,7 +76,7 @@ class Uarm(RobotModel):
     # TR
     def pickup(self,block):
         bColor = functions.index_to_color(block)
-        x,y,z = self._state.env[bColor]
+        x,y,z = self._state.block_env[bColor]
         scheme = [0,0,60,120]
         self.placeEnd((int(x),int(y),scheme[z]))
         self.enableSuction()
@@ -142,7 +153,8 @@ class Uarm(RobotModel):
         rawFront = np.array(self._sensors["cameraFront"].raw_image(), dtype=np.uint8)
         rawFront.resize(128, 128, 3)
         object_list = functions.readVisionData(imageTop, imageFront,rawTop ,rawFront)
-        self._state.env = object_list
+        self._state.block_env = object_list
+        self._state.slot_env = functions.getFreeSlots(object_list,self._env_slots)
         return object_list
 
 
