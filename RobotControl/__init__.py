@@ -16,11 +16,12 @@ class Control(object):
             print('V-REP not responding')
             exit(-1)
         self.robot = None
+        self._api.simulation.start()
 
     def run(self):
-            while True:
-                self.process_percepts(self.robot.get_percepts(),self.robot.isHolding())
-                self.robot.process_commands(self.get_commands())
+        while True:
+            self.process_percepts(self.robot.get_percepts(),self.robot.isHolding())
+            self.robot.process_commands(self.get_commands())
 
     def make_robot(self, api):
         return None
@@ -66,20 +67,24 @@ class PedroControl(Control):
 
     def process_percepts(self, block_percepts, arm_holding):
         msg = []
-
-        for color,(x,y,z) in block_percepts.items():
-            #print("color: {0}".format(color))
-            #print("X: {0} | Y: {1} | Z: {2}".format(x,y,z))
-            index_color_on = f.color_to_index(color)
-            if z == 1:
-                msg.append('on_table({0})'.format(index_color_on))
-            else:
-                for c,(px,py,pz) in block_percepts.items():
-                    if px == x and py == y and pz == z - 1:
-                        index_color_under = f.color_to_index(c)
-                        msg.append('on({0},{1})'.format(index_color_on,index_color_under))
+        if not arm_holding == 0:
+            msg.clear()
+            msg.append('holding({0})'.format(arm_holding))
+        else:
+            for color,(x,y,z) in block_percepts.items():
+                #print("color: {0}".format(color))
+                #print("X: {0} | Y: {1} | Z: {2}".format(x,y,z))
+                index_color_on = f.color_to_index(color)
+                if z == 1:
+                    msg.append('on_table({0})'.format(index_color_on))
+                else:
+                    for c,(px,py,pz) in block_percepts.items():
+                        if px == x and py == y and pz == z - 1:
+                            index_color_under = f.color_to_index(c)
+                            msg.append('on({0},{1})'.format(index_color_on,index_color_under))
 
         if not arm_holding == 0:
+            msg.clear()
             msg.append('holding({0})'.format(arm_holding))
         # else:
         #     msg.append('[f_(holding(1))]')

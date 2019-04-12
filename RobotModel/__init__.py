@@ -71,13 +71,13 @@ class Uarm(RobotModel):
         return self._baseSize, self._arm1, self._arm2, self._endEffectorDisplacement, self._thethaDisplacementRad
 
     def goHome(self):
-        self.placeEnd((530 / 2, 0, 50))
+        self.placeEnd((530 / 2, 0, 130))
 
     # TR
     def pickup(self,block):
         bColor = functions.index_to_color(block)
         x,y,z = self._state.block_env[bColor]
-        scheme = [0,0,61,130]
+        scheme = [0,-11,61,115]
         self.placeEnd((int(x),int(y),130))
         self.placeEnd((int(x),int(y),scheme[z]))
         self.enableSuction()
@@ -86,14 +86,14 @@ class Uarm(RobotModel):
         self.setHolding(block)
 
     def put_on_table(self):
-        x,y = self._state.slot_env[0] #Use the first free slot
+        x,y = self._state.slot_env.pop(0) #Use the first free slot and removes it, as it will no longer be free
         self.placeEnd((x, y, 130))
         self.placeEnd((x,y,0))
         self.disableSuction()
         self.placeEnd((x, y, 130))
         self.goHome()
         self.setHolding(0)
-        self._state.slot_env.remove((x,y)) # the slot has just been used so it's no longer free
+
 
     def placeEnd(self, coordinates: tuple):
         x, y, z = coordinates
