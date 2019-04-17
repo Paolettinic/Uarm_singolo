@@ -131,7 +131,7 @@ class PedroControl(Control):
         self.percepts_addr = addr
 
     def make_robot(self, api) -> Uarm:
-        return Uarm('uarmR', api)
+        return Uarm('uarmL', api)
 
     def action_to_command(self, a):
         cmd_type = a.functor.val

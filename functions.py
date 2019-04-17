@@ -116,6 +116,7 @@ def readVisionData(imageTop, imageFront, rawTop, rawFront):
         levels = round(height/width)
         if levels == 1:
             color = getColorName(*readImagesColor(rawFront,posy,posx))
+            print("color: {0}, posx: {1}, posy{2}".format(color,posy,posy))
             x, y = cubes_top[color]
             object_list.update({color:(x,y,1)})
         else:
@@ -151,7 +152,7 @@ def color_to_index(color): #TASK : 432 615
         "cyan": 2,
         "red": 3,
         "green": 4,
-        "bue": 5,
+        "blue": 5,
         "yellow": 6
     }
     return scheme.get(color, "grey")
