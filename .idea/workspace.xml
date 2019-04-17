@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="87b1501f-d38c-4fd9-ae80-39dc32825107" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/scene/Uarm_dismantle_L.ttt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RobotControl/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/RobotControl/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/functions.py" afterDir="false" />
@@ -241,15 +240,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="956" height="1050" extended-state="1" />
-    <editor active="true" />
+    <frame x="0" y="0" width="956" height="1050" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21864952" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21864952" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.329718" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.22668113" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.22668113" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3991323" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -310,7 +308,8 @@
     <MESSAGE value="Slot choice implemented,&#10;Find a way to interact with Vrep without a reset of the scene." />
     <MESSAGE value="README.md updated" />
     <MESSAGE value="Solved slot issue, added simulation start, improved message sent to Teleor: just sends holding() if holding something, otherwise it sends the bloks state." />
-    <option name="LAST_COMMIT_MESSAGE" value="Solved slot issue, added simulation start, improved message sent to Teleor: just sends holding() if holding something, otherwise it sends the bloks state." />
+    <MESSAGE value="Color to index function corrected, changed scene (USE physic engine 2.83)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Color to index function corrected, changed scene (USE physic engine 2.83)" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
